@@ -23,6 +23,7 @@ class ContactFactory extends Factory
         'name' => fake()->name(),
         'user_id' => User::query()->inRandomOrder()->value("id") ?? User::factory(),
         'phone_number' => fake()->phoneNumber(),
+        'residence' => fake()->address()
         ];
     }
 }

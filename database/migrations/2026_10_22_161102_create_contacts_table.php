@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->foreignid("user_id")->constrained();
             $table->string("phone_number");
+            $table->text("residence");
             $table->timestamps();
 
         });
