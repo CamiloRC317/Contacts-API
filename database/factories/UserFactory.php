@@ -31,7 +31,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'phone_number' => fake()->phoneNumber(),
             'residence' => fake()->address(),
-            'url_img' =>"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemcwXK2PydnUgOUCRNKUAU5f6Gu_mTVUGnCHHOosOrvIEOBykfRzqtlE&s=10",
+            'url_img' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemcwXK2PydnUgOUCRNKUAU5f6Gu_mTVUGnCHHOosOrvIEOBykfRzqtlE&s=10',
             'remember_token' => Str::random(10),
         ];
     }

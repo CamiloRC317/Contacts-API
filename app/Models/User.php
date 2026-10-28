@@ -4,18 +4,16 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Contact;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory,Notifiable;
 
     protected $fillable = [
         'id',
@@ -25,11 +23,14 @@ class User extends Authenticatable
         'url_img',
         'residence',
         'phone_number',
-        'is_active'
+        'is_active',
     ];
-    public function contact():HasMany{
+
+    public function contact(): HasMany
+    {
         return $this->hasMany(Contact::class);
     }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -42,5 +43,4 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
 }
