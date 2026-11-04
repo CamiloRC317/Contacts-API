@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -39,6 +39,7 @@ class AuthController extends Controller
             'user' => new UserResource($user),
         ]);
     }
+
     /**
      * Perfil del usuario autenticado.
      */
