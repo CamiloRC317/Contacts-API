@@ -21,5 +21,9 @@ Route::prefix('v1')->group(function () {
             Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         });
     });
-
+    //Rutas de contactos
+    Route::prefix('contacts')->middleware('auth:sanctum')->group(function () {
+        Route::get('/me', [\App\Http\Controllers\ContactController::class, 'getContact'])->name('contacts.me');
+        Route::delete('/{id}', [\App\Http\Controllers\ContactController::class, 'deleteContact'])->name('contacts.delete');
+    });
 });
