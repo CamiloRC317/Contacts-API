@@ -30,4 +30,34 @@ class ContactController extends Controller
         $contact->delete();
         return response()->json(['message' => 'Contacto eliminado correctamente']);
     }
+
+    public function putContact(Request $request, int $id)
+    {
+        $contact = $request->user()->contacts()->find($id);
+        $contact_email = $request->user()->contacts()->where('email', $request->input('email'))->first();
+        $contact_number = $request->user()->contacts()->where('phone_number', $request->input('phone_number'))->first();
+
+        if (($contact_email != null && $contact_email->id != $id) || ($contact_number != null && $contact_number->id != $id)) {
+            return response()->json(['message' => 'El correo o número de teléfono del contacto ya existe'], 409);
+        }
+
+        if ($contact === null) {
+            return response()->json(['message' => 'Contacto no encontrado'], 404);
+        }
+        $contact->update($request->all());
+        return response()->json(['message' => 'Contacto actualizado correctamente']);
+    }
+
+    public function postContact(Request $request)
+    {
+        $contact_email = $request->user()->contacts()->where('email', $request->input('email'))->first();
+        $contact_number = $request->user()->contacts()->where('phone_number', $request->input('phone_number'))->first();
+        
+        if ($contact_email != null || $contact_number != null) {
+            return response()->json(['message' => 'El correo o número de teléfono del contacto ya existe'], 409);
+        }
+        $contact = $request->user()->contacts()->create($request->all());
+        return response()->json(['message' => 'Contacto creado correctamente', 'contact' => new ContactResource($contact)]);
+    }
+    
 }

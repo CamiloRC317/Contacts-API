@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignid('user_id')->constrained();
             $table->string('name');
+            $table->string('email')->unique();
             $table->string('phone_number');
+            $table->text('residence');
+            $table->text('url_img')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

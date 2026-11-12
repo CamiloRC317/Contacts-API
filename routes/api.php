@@ -25,5 +25,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('contacts')->middleware('auth:sanctum')->group(function () {
         Route::get('/me', [\App\Http\Controllers\ContactController::class, 'getContact'])->name('contacts.me');
         Route::delete('/{id}', [\App\Http\Controllers\ContactController::class, 'deleteContact'])->name('contacts.delete');
+        Route::put('/{id}', [\App\Http\Controllers\ContactController::class, 'putContact'])->name('contacts.update');
+        Route::post('/create', [\App\Http\Controllers\ContactController::class, 'postContact'])->name('contacts.create');
     });
 });
