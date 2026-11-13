@@ -27,5 +27,6 @@ Route::prefix('v1')->group(function () {
         Route::delete('/{id}', [\App\Http\Controllers\ContactController::class, 'deleteContact'])->name('contacts.delete');
         Route::put('/{id}', [\App\Http\Controllers\ContactController::class, 'putContact'])->name('contacts.update');
         Route::post('/create', [\App\Http\Controllers\ContactController::class, 'postContact'])->name('contacts.create');
+        Route::get('/{id}', [\App\Http\Controllers\ContactController::class, 'getContactById'])->name('contacts.get');
     });
 });

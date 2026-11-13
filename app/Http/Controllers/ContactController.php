@@ -20,6 +20,14 @@ class ContactController extends Controller
         }
         return response()->json(['message' => 'No tiene contactos'], 404);
     }
+    public function getContactById(Request $request, int $id)
+    {
+        $contact = $request->user()->contacts()->find($id);
+        if ($contact === null) {
+            return response()->json(['message' => 'Contacto no encontrado'], 404);
+        }
+        return response()->json(new ContactResource($contact));
+    }
 
     public function deleteContact(Request $request, int $id)
     {
@@ -57,7 +65,7 @@ class ContactController extends Controller
             return response()->json(['message' => 'El correo o número de teléfono del contacto ya existe'], 409);
         }
         $contact = $request->user()->contacts()->create($request->all());
-        return response()->json(['message' => 'Contacto creado correctamente', 'contact' => new ContactResource($contact)]);
+        return response()->json(['message' => 'Contacto creado correctamente', 'contact' => new ContactResource($contact)], 201);
     }
     
 }

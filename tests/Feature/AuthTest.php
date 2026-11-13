@@ -41,7 +41,7 @@ class AuthTest extends TestCase
             ->assertJsonStructure([
                 'token',
                 'token_type',
-                'user' => ['id', 'name', 'email', 'url_img', 'residence', 'phone_number'],
+                'user' => ['id', 'name', 'email'],
             ])
             ->assertJsonPath('user.email', self::EMAIL)
             ->assertJsonMissingPath('user.password');
