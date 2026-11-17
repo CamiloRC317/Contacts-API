@@ -64,6 +64,9 @@ class ContactController extends Controller
         if ($contact_email != null || $contact_number != null) {
             return response()->json(['message' => 'El correo o número de teléfono del contacto ya existe'], 409);
         }
+        if (request()->input('phone_number') == null || request()->input('name') == null) {
+            return response()->json(['message' => 'Faltan datos para crear el contacto'], 422);
+        }
         $contact = $request->user()->contacts()->create($request->all());
         return response()->json(['message' => 'Contacto creado correctamente', 'contact' => new ContactResource($contact)], 201);
     }

@@ -18,19 +18,21 @@ test('crea un contacto válido', function () {
     $response = $this->postJson('/api/v1/contacts/create', [
         'name' => 'Ana Torres',
         'phone_number' => '3001234567',
+        'email' => 'JuanitoAlimaña@gmail.com',
     ]);
 
     // Comprobar respuesta HTTP y JSON
     $response->assertCreated()
         ->assertJsonPath('contact.name', 'Ana Torres')
-        ->assertJsonPath('contact.phone_number', '3001234567');
+        ->assertJsonPath('contact.phone_number', '3001234567')
+        ->assertJsonPath('contact.email', 'JuanitoAlimaña@gmail.com');
 
     // Comprobar que se guardó en la base de datos
     $this->assertDatabaseHas('contacts', [
         'user_id' => $user->id,
         'name' => 'Ana Torres',
         'phone_number' => '3001234567',
-        'email' => null,
+        'email' => 'JuanitoAlimaña@gmail.com',
     ]);
 });
 
@@ -39,6 +41,8 @@ test('devuelve 404 para un contacto ajeno', function () {
     $visitor = User::factory()->create();
     $contact = Contact::factory()->for($owner)->create([
         'name' => 'Contacto privado',
+        'phone_number' => '3001234567',
+        'email' => 'JuanitoAlimaña@gmail.com',
     ]);
     Sanctum::actingAs($visitor);
     $this->getJson('/api/v1/contacts/'.$contact->id)
@@ -47,11 +51,20 @@ test('devuelve 404 para un contacto ajeno', function () {
 
 });
 
+test('devuelve 422 al crear un contacto sin datos', function () {
+    $user = User::factory()->create();
+    Sanctum::actingAs($user);
+
+    $this->postJson('/api/v1/contacts/create', [])
+        ->assertStatus(422)
+        ->assertJsonPath('message', 'Faltan datos para crear el contacto');
+});
+
 test('devuelve los contactos del usuario autenticado sin mostrar los de otros usuarios', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
-    Contact::factory()->for($user)->create(['name' => 'Contacto propio']);
-    Contact::factory()->for($otherUser)->create(['name' => 'Contacto privado']);
+    Contact::factory()->for($user)->create(['name' => 'Contacto propio', 'phone_number' => '3001234567', 'email' => 'JuanitoAlimaña@gmail.com']);
+    Contact::factory()->for($otherUser)->create(['name' => 'Contacto privado', 'phone_number' => '3009876543', 'email' => 'ContactoPrivado@gmail.com']);
     Sanctum::actingAs($user);
 
     $this->getJson('/api/v1/contacts/me')
@@ -73,6 +86,7 @@ test('devuelve los datos de un contacto propio', function () {
     $contact = Contact::factory()->for($user)->create([
         'name' => 'Ana Torres',
         'phone_number' => '3001234567',
+        'email' => 'JuanitoAlimaña@gmail.com',
     ]);
     Sanctum::actingAs($user);
 
@@ -80,7 +94,8 @@ test('devuelve los datos de un contacto propio', function () {
         ->assertOk()
         ->assertJsonPath('id', $contact->id)
         ->assertJsonPath('name', 'Ana Torres')
-        ->assertJsonPath('phone_number', '3001234567');
+        ->assertJsonPath('phone_number', '3001234567')
+        ->assertJsonPath('email', 'JuanitoAlimaña@gmail.com');
 });
 
 test('elimina un contacto propio', function () {
