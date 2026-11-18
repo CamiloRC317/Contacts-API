@@ -9,7 +9,6 @@ use App\Http\Resources\ContactResource;
 class ContactController extends Controller
 {
     //
-
     public function getContact(Request $request)
     {
         $contacts = $request->user()->contacts;
