@@ -66,7 +66,14 @@ class ContactController extends Controller
         if (request()->input('phone_number') == null || request()->input('name') == null) {
             return response()->json(['message' => 'Faltan datos para crear el contacto'], 422);
         }
-        $contact = $request->user()->contacts()->create($request->all());
+        $contact = $request->user()->contacts()->create([
+            'name' => request()->input('name'),
+            'email' => request()->input('email'),
+            'phone_number' => request()->input('phone_number'),
+            'url_img' => request()->input('url_img') ?: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+        ]
+            
+        );
         return response()->json(['message' => 'Contacto creado correctamente', 'contact' => new ContactResource($contact)], 201);
     }
     
